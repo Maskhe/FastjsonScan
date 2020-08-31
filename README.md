@@ -1,0 +1,2 @@
+# FastjsonScan
+一个简单的Fastjson反序列化检测burp插件
