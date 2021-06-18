@@ -1,4 +1,8 @@
 # FastjsonScan
+![GitHub](https://img.shields.io/github/license/Maskhe/FastjsonScan)
+![GitHub top language](https://img.shields.io/github/languages/top/Maskhe/FastjsonScan)
+![GitHub all releases](https://img.shields.io/github/downloads/Maskhe/FastjsonScan/total)
+![](https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6%E5%91%98-brightgreen)
 
 一个简单的Fastjson反序列化检测burp插件
 
