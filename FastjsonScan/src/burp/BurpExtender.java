@@ -133,21 +133,30 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
         // 拿到的headers是一个数组类型，每一个元素都是类似这样：Host: 127.0.0.1
         List<String> headers =  this.helpers.analyzeRequest(baseRequestResponse).getHeaders();
         try{
-            if(method.equals("POST") && content_type == 4){
+            if(method.equals("POST") && (content_type == IRequestInfo.CONTENT_TYPE_JSON || content_type == IRequestInfo.CONTENT_TYPE_URL_ENCODED || content_type == IRequestInfo.CONTENT_TYPE_XML)){
                 IHttpService iHttpService = baseRequestResponse.getHttpService();
                 IBurpCollaboratorClientContext context= this.callbacks.createBurpCollaboratorClientContext();
                 // 一个burp提供的dnslog平台
                 String dnslog = context.generatePayload(true);
                 List<IBurpCollaboratorInteraction> dnsres = new ArrayList<>();
                 this.stdout.println(dnslog);
+                List<String> newHeaders = new ArrayList<>();
+                // 强制替换content-type为json
+                for(String header: headers){
+                    if (header.startsWith("Content-Type")) {
+                        newHeaders.add("Content-Type: application/json");
+                    } else {
+                        newHeaders.add(header);
+                    }
+                }
                 for (String payload:payloads){
                     payload = String.format(payload, dnslog);
                     byte[] bytePayload = this.helpers.stringToBytes(payload);
-                    byte[] postMessage = this.helpers.buildHttpMessage(headers, bytePayload);
+                    byte[] postMessage = this.helpers.buildHttpMessage(newHeaders, bytePayload);
                     // 向目标发送payload
                     IHttpRequestResponse resp = this.callbacks.makeHttpRequest(iHttpService, postMessage);
-                    // 担心目标有延迟，所有延时一秒再查看dnslog平台
-                    Thread.sleep(1000);
+                    // 担心目标有延迟，所有延时2秒再查看dnslog平台
+                    Thread.sleep(2000);
                     // 返回的是一个数组
                     dnsres = context.fetchCollaboratorInteractionsFor(dnslog);
                     this.stdout.println(dnsres);
@@ -167,7 +176,7 @@ public class BurpExtender extends AbstractTableModel implements IBurpExtender, I
                     fireTableRowsUpdated(row, row);
                 }
             }else{
-                // 如果使用者将非post类型或者非json数据的请求发送到fastjson scan中，则会直接提示not supporeted
+                // 如果使用者将非post类型或者非特定数据类型的请求发送到fastjson scan中，则会直接提示not supporeted
                 LogEntry logEntry = new LogEntry(url, "not supported", "not supported", baseRequestResponse);
                 log.set(row, logEntry);
                 fireTableRowsUpdated(row, row);
