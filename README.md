@@ -32,7 +32,9 @@ FastjsonScan扫描结果界面：
 
 > ps: 由于反序列化检测利用了dnslog，所以检测会稍微慢一点，在等待结果期间你还可以继续看其他请求，真的是相当方便呢
 
+### 说明
 
+该插件只会检查content-type为xml、json、url-encoded的post请求，其他请求会返回not supported
 ### 核心代码
 
 
