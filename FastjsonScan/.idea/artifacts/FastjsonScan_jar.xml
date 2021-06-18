@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="FastjsonScan:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/FastjsonScan_jar</output-path>
-    <root id="archive" name="FastjsonScan.jar">
-      <element id="module-output" name="FastjsonScan" />
-    </root>
-  </artifact>
-</component>
